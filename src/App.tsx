@@ -19,6 +19,7 @@ export function App({ entries = ENTRIES }: AppProps) {
   const [navOpen, setNavOpen] = useState(false);
   const hash = useHash();
   const searchRef = useRef<HTMLInputElement>(null);
+  const navToggleRef = useRef<HTMLButtonElement>(null);
 
   const index = useMemo(() => buildIndex(entries), [entries]);
   const results = useMemo(() => search(index, deferredQuery), [index, deferredQuery]);
@@ -46,6 +47,18 @@ export function App({ entries = ENTRIES }: AppProps) {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
+
+  // Escape closes the mobile nav and returns focus to its toggle.
+  useEffect(() => {
+    if (!navOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setNavOpen(false);
+      navToggleRef.current?.focus();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [navOpen]);
 
   // Deep link: if the target is hidden by the current search, clear the search first.
   const hashTargetsEntry = entries.some((e) => e.id === hash);
@@ -75,6 +88,7 @@ export function App({ entries = ENTRIES }: AppProps) {
       </a>
       <header className="topbar">
         <button
+          ref={navToggleRef}
           type="button"
           className="btn nav-toggle"
           aria-expanded={navOpen}

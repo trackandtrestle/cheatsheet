@@ -1,0 +1,87 @@
+/* ---------- shared by the dom-a11y demos ---------- */
+.a11y-field {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 220px;
+}
+.a11y-popup,
+.a11y-listbox {
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.a11y-popup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  margin-top: 4px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.a11y-listbox {
+  min-width: 160px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+.a11y-listbox:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.a11y-popup [role='option'],
+.a11y-listbox [role='option'] {
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text);
+}
+.a11y-popup [role='option']:hover {
+  background: var(--surface-2);
+}
+/* Virtual focus must be visible: DOM focus is elsewhere. */
+.a11y-popup [aria-selected='true'],
+.a11y-listbox [aria-selected='true'] {
+  background: var(--accent-soft);
+  outline: 1px solid var(--accent);
+}
+.a11y-toolbar {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+.a11y-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 0.45);
+}
+.a11y-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(360px, calc(100vw - 32px));
+  padding: 16px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.a11y-modal h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.a11y-muted {
+  color: var(--muted);
+  font-size: 13px;
+}

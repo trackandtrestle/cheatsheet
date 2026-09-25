@@ -94,4 +94,15 @@ describe('App shell', () => {
     expect(await navigator.clipboard.readText()).toBe('[1, 10, 2].sort((a, b) => a - b);');
     expect(screen.getByText('Copied to clipboard')).toBeInTheDocument();
   });
+
+  it('Escape closes the section nav', async () => {
+    const user = userEvent.setup();
+    render(<App entries={entries} />);
+    const toggle = screen.getByRole('button', { name: 'Sections' });
+    await user.click(toggle);
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    await user.keyboard('{Escape}');
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(toggle).toHaveFocus();
+  });
 });

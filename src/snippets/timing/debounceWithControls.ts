@@ -27,15 +27,11 @@ export function debounceWithControls<A extends unknown[]>(
     timer = setTimeout(invoke, wait);
   };
 
-  return Object.assign(debounced, {
-    cancel: () => {
-      clearTimeout(timer);
-      timer = lastArgs = undefined;
-    },
-    flush: () => {
-      clearTimeout(timer);
-      invoke();
-    },
-    pending: () => timer !== undefined,
-  });
+  const cancel = () => {
+    clearTimeout(timer);
+    timer = lastArgs = undefined;
+  };
+  const flush = () => (clearTimeout(timer), invoke());
+
+  return Object.assign(debounced, { cancel, flush, pending: () => timer !== undefined });
 }

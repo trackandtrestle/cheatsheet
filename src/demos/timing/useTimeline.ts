@@ -111,7 +111,8 @@ export function laneWindows(events: readonly TimelineEvent[], lane: LaneKey): [n
     return mergeIntervals(events.filter((e) => e.lane === 'raw').map((e) => [e.t, e.t + e.wait] as const));
   }
   if (lane === 'throttle') {
-    return mergeIntervals(events.filter((e) => e.lane === 'throttle').map((e) => [e.t, e.t + e.wait] as const));
+    // Not merged: each lock-out window is its own bar, so the steady rhythm stays visible.
+    return events.filter((e) => e.lane === 'throttle').map((e) => [e.t, e.t + e.wait]);
   }
   return [];
 }

@@ -3,6 +3,7 @@ import type { Entry } from '../content/types';
 import { CodeBlock } from './CodeBlock';
 import { CopyButton } from './CopyButton';
 import { DemoBoundary } from './ErrorBoundary';
+import { RichText } from './RichText';
 
 interface EntryCardProps {
   entry: Entry;
@@ -15,6 +16,38 @@ export const EntryCard = memo(function EntryCard({ entry, theme, active }: Entry
   const [demoOpen, setDemoOpen] = useState(entry.demoOpen ?? false);
   const headingId = `${id}-title`;
   const demoId = useId();
+  // Demos that open by default (the showcase) render above the code.
+  const demoFirst = entry.demoOpen === true;
+
+  const demo = Demo && (
+    <section className="demo" aria-label={`Live demo: ${title}`}>
+      <button
+        type="button"
+        className="btn btn-small"
+        aria-expanded={demoOpen}
+        aria-controls={demoId}
+        onClick={() => setDemoOpen((o) => !o)}
+      >
+        {demoOpen ? 'Hide live demo' : 'Show live demo'}
+      </button>
+      <div id={demoId} className="demo-body" hidden={!demoOpen}>
+        {demoOpen && (
+          <DemoBoundary
+            fallback={(err, reset) => (
+              <div role="alert" className="demo-error">
+                Demo crashed: {err.message}{' '}
+                <button type="button" className="btn btn-small" onClick={reset}>
+                  Retry
+                </button>
+              </div>
+            )}
+          >
+            <Demo />
+          </DemoBoundary>
+        )}
+      </div>
+    </section>
+  );
 
   return (
     <article id={id} className={`card${active ? ' card-active' : ''}`} aria-labelledby={headingId} tabIndex={-1}>
@@ -31,7 +64,11 @@ export const EntryCard = memo(function EntryCard({ entry, theme, active }: Entry
           ))}
         </ul>
       </header>
-      <p className="summary">{summary}</p>
+      <p className="summary">
+        <RichText text={summary} />
+      </p>
+
+      {demoFirst && demo}
 
       <div className="code-wrap">
         <CopyButton text={snippet} label={`Copy code for ${title}`} />
@@ -45,41 +82,15 @@ export const EntryCard = memo(function EntryCard({ entry, theme, active }: Entry
           </summary>
           <ul>
             {gotchas.map((g) => (
-              <li key={g}>{g}</li>
+              <li key={g}>
+                <RichText text={g} />
+              </li>
             ))}
           </ul>
         </details>
       )}
 
-      {Demo && (
-        <section className="demo" aria-label={`Live demo: ${title}`}>
-          <button
-            type="button"
-            className="btn btn-small"
-            aria-expanded={demoOpen}
-            aria-controls={demoId}
-            onClick={() => setDemoOpen((o) => !o)}
-          >
-            {demoOpen ? 'Hide live demo' : 'Show live demo'}
-          </button>
-          <div id={demoId} className="demo-body" hidden={!demoOpen}>
-            {demoOpen && (
-              <DemoBoundary
-                fallback={(err, reset) => (
-                  <div role="alert" className="demo-error">
-                    Demo crashed: {err.message}{' '}
-                    <button type="button" className="btn btn-small" onClick={reset}>
-                      Retry
-                    </button>
-                  </div>
-                )}
-              >
-                <Demo />
-              </DemoBoundary>
-            )}
-          </div>
-        </section>
-      )}
+      {!demoFirst && demo}
     </article>
   );
 });

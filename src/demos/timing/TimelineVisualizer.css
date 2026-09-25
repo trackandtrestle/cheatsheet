@@ -131,6 +131,7 @@
 }
 .tv-window {
   position: absolute;
+  border-left: 2px solid color-mix(in srgb, var(--lane) 55%, transparent);
   top: 6px;
   bottom: 6px;
   background: color-mix(in srgb, var(--lane) 22%, transparent);

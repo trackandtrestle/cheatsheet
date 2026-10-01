@@ -15,4 +15,6 @@ npm run build      # typecheck + production build
 - `#<entry-id>` deep-links to an entry; each card has copy, gotchas and (often) a live demo.
 - Showcase: **Timing → Debounce vs throttle: timeline visualizer**.
 
+A **Vue 3 edition** lives in [`vue/`](vue/README.md) and shares the framework-agnostic sections.
+
 Adding an entry: see [docs/AUTHORING.md](docs/AUTHORING.md). Design calls: [DECISIONS.md](DECISIONS.md).

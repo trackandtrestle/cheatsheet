@@ -1,4 +1,5 @@
 import type { Entry } from './types';
+import { rateLimitEntries } from './timing-rate-limit';
 import setTimeoutSrc from '../../../src/snippets/timing/setTimeout.ts?raw';
 
 export const timingEntries: Entry[] = [
@@ -14,4 +15,6 @@ export const timingEntries: Entry[] = [
       'The delay is a minimum, not a guarantee: a busy main thread delays the callback.',
     ],
   },
+  // debounce / throttle family lives in timing-rate-limit.ts
+  ...rateLimitEntries,
 ];
